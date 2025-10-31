@@ -14,11 +14,21 @@ export default function Login() {
     setError('');
     setLoading(true);
     try {
-      const res = await axios.post(getApiUrl('api/auth/login'), { email, password });
+      const apiUrl = getApiUrl('api/auth/login');
+      console.log('Login API URL:', apiUrl);
+      const res = await axios.post(apiUrl, { email, password });
       localStorage.setItem('token', res.data.token);
       window.location.href = '/profile';
     } catch (err) {
-      setError(err?.response?.data?.message || 'เข้าสู่ระบบไม่สำเร็จ');
+      console.error('Login error:', err);
+      console.error('Error response:', err?.response);
+      if (err?.response?.status === 404) {
+        setError('ไม่พบ API endpoint ที่ต้องการ กรุณาตรวจสอบการเชื่อมต่อ');
+      } else if (err?.response?.status === 401) {
+        setError(err?.response?.data?.message || 'อีเมลหรือรหัสผ่านไม่ถูกต้อง');
+      } else {
+        setError(err?.response?.data?.message || 'เข้าสู่ระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง');
+      }
     } finally {
       setLoading(false);
     }
