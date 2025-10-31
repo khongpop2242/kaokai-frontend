@@ -1,0 +1,131 @@
+/* === PAGE & LAYOUT === */
+.register-page {
+  display: flex;
+  justify-content: center;
+  background: #fff;
+  padding: 40px 0 24px;
+}
+
+.register-container {
+  width: 100%;
+  max-width: 980px;                    /* กว้างรวมรูป + ฟอร์ม */
+  display: grid;
+  grid-template-columns: 1fr 460px;    /* ซ้ายรูป / ขวาฟอร์ม */
+  gap: 24px;
+  align-items: start;
+  padding: 0 16px;
+}
+
+/* LEFT (image) */
+.register-left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 520px;                   /* ให้มีสัดส่วนใกล้เคียงภาพตัวอย่าง */
+}
+
+.logo-login {
+  width: 100%;
+  max-width: 300px;                    /* ขนาดรูปสูงสุด */
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+/* RIGHT (form) */
+.register-right h1 {
+  text-align: left;
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 18px;
+}
+
+.register-form label {
+  display: block;
+  font-weight: 700;
+  margin: 12px 0 6px;
+}
+
+.register-form input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.register-form .name-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+/* FEEDBACK */
+.error {
+  color: #b40000;
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+/* BUTTON */
+.btn-register {
+  width: 100%;
+  padding: 12px 16px;
+  background: #b40000;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.btn-register:hover { background: #a00000; }
+.btn-register:disabled { background: #ccc; cursor: not-allowed; }
+
+/* TERMS & NOTE */
+.terms {
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.terms label {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.terms input[type="checkbox"] {
+  width: auto;
+  margin: 0;
+}
+
+.login-note {
+  margin-top: 12px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.login-note a {
+  color: #b40000;
+  text-decoration: none;
+}
+.login-note a:hover { text-decoration: underline; }
+
+/* === RESPONSIVE === */
+@media (max-width: 900px) {
+  .register-container {
+    grid-template-columns: 1fr;       /* ซ้อนเป็นคอลัมน์เดียวบนมือถือ */
+  }
+  .register-left {
+    min-height: auto;
+    padding-bottom: 8px;
+  }
+  .register-right h1 {
+    text-align: center;
+  }
+}
