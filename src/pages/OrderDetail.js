@@ -1,5 +1,5 @@
 // src/pages/OrderDetail.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getApiUrl } from '../config/api';
@@ -27,7 +27,7 @@ const OrderDetail = () => {
     });
 
   // ดึงข้อมูล
-  const fetchOrderDetails = async () => {
+  const fetchOrderDetails = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
       if (!token) { navigate('/login'); return; }
@@ -50,8 +50,11 @@ const OrderDetail = () => {
       else if (err.response?.status === 403) setError('คุณไม่มีสิทธิ์เข้าถึงคำสั่งซื้อนี้');
       else setError('ไม่สามารถโหลดข้อมูลคำสั่งซื้อได้');
     } finally { setLoading(false); }
-  };
-  useEffect(() => { fetchOrderDetails(); /* eslint-disable-next-line */ }, [orderId]);
+  }, [orderId, navigate]);
+  
+  useEffect(() => { 
+    fetchOrderDetails(); 
+  }, [fetchOrderDetails]);
 
   // สถานะ
   const statusText = {
@@ -329,7 +332,6 @@ const OrderDetail = () => {
   const ccFee = Number(order.creditCharge || 0);
   const total = Number(order.total ?? (subtotal - discount + shippingFee));
   const eligible = total - platformFee - ccFee;
-  const timeline = buildTimeline(order);
   const currentStatus = statusText[order.status] || order.status;
 
   return (

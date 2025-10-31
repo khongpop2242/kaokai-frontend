@@ -150,9 +150,6 @@ const Checkout = () => {
   const handleDeliveryMethodChange = (method) => setDeliveryMethod(method);
   const handleInvoiceChange = (need) => setNeedInvoice(need);
 
-  const handleInvoiceDataChange = (field, value) =>
-    setInvoiceData(prev => ({ ...prev, [field]: value }));
-
   const handleDeliveryAddressChange = (field, value) =>
     setDeliveryAddress(prev => ({ ...prev, [field]: value }));
 

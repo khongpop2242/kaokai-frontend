@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import API_URL, { getApiUrl } from '../config/api';
+import { getApiUrl } from '../config/api';
 import axios from 'axios';
 import './Products.css';
 
 const Products = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [sortBy, setSortBy] = useState('recommended');
@@ -27,11 +28,26 @@ const Products = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(getApiUrl('api/products'));
-        setProducts(response.data);
-        setFilteredProducts(response.data);
+        setError('');
+        const apiUrl = getApiUrl('api/products');
+        console.log('Fetching products from:', apiUrl);
+        const response = await axios.get(apiUrl);
+        console.log('Products response:', response.data);
+        
+        if (response.data && Array.isArray(response.data)) {
+          setProducts(response.data);
+          setFilteredProducts(response.data);
+        } else {
+          setError('ไม่พบข้อมูลสินค้า');
+          setProducts([]);
+          setFilteredProducts([]);
+        }
       } catch (error) {
         console.error('Error fetching products:', error);
+        console.error('Error details:', error.response?.data || error.message);
+        setError('ไม่สามารถโหลดข้อมูลสินค้าได้ กรุณาลองใหม่อีกครั้ง');
+        setProducts([]);
+        setFilteredProducts([]);
       } finally {
         setLoading(false);
       }
@@ -101,6 +117,56 @@ const Products = () => {
         <div className="container">
           <h1>สินค้าทั้งหมด</h1>
           <div className="loading">กำลังโหลด...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="products-page">
+        <div className="container">
+          <h1>สินค้าทั้งหมด</h1>
+          <div className="error-message" style={{ 
+            padding: '20px', 
+            textAlign: 'center', 
+            color: '#d32f2f',
+            backgroundColor: '#ffebee',
+            borderRadius: '4px',
+            margin: '20px 0'
+          }}>
+            <p>{error}</p>
+            <button 
+              onClick={() => window.location.reload()} 
+              style={{
+                marginTop: '10px',
+                padding: '10px 20px',
+                backgroundColor: '#1976d2',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer'
+              }}
+            >
+              ลองใหม่อีกครั้ง
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (filteredProducts.length === 0) {
+    return (
+      <div className="products-page">
+        <div className="container">
+          <h1>สินค้าทั้งหมด</h1>
+          <div style={{ 
+            padding: '20px', 
+            textAlign: 'center' 
+          }}>
+            <p>ไม่พบสินค้า</p>
+          </div>
         </div>
       </div>
     );
