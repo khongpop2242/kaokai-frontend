@@ -35,13 +35,37 @@ export default function Register() {
     setLoading(true);
     try {
       const name = `${firstName} ${lastName}`.trim();
-      const res  = await axios.post(getApiUrl('api/auth/register'), {
-        name, email, password, phone
+      const apiUrl = getApiUrl('api/auth/register');
+      console.log('Register API URL:', apiUrl);
+      console.log('Register data:', { name, email, phone: phone || null });
+      
+      const res = await axios.post(apiUrl, {
+        name, email, password, phone: phone || null
       });
+      
+      console.log('Register response:', res.data);
       localStorage.setItem('token', res.data.token);
       window.location.href = '/profile';
     } catch (err) {
-      setError(err?.response?.data?.message || 'สมัครสมาชิกไม่สำเร็จ');
+      console.error('Register error:', err);
+      console.error('Error response:', err?.response);
+      console.error('Error details:', {
+        status: err?.response?.status,
+        data: err?.response?.data,
+        message: err?.message
+      });
+      
+      if (err?.response?.status === 404) {
+        setError('ไม่พบ API endpoint ที่ต้องการ กรุณาตรวจสอบการเชื่อมต่อ');
+      } else if (err?.response?.status === 409) {
+        setError(err?.response?.data?.message || 'อีเมลนี้มีผู้ใช้แล้ว');
+      } else if (err?.response?.status === 400) {
+        setError(err?.response?.data?.message || 'กรุณากรอกข้อมูลให้ครบถ้วน');
+      } else if (err?.code === 'ERR_NETWORK' || err?.message?.includes('Network')) {
+        setError('ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้ กรุณาลองใหม่อีกครั้ง');
+      } else {
+        setError(err?.response?.data?.message || 'สมัครสมาชิกไม่สำเร็จ กรุณาลองใหม่อีกครั้ง');
+      }
     } finally {
       setLoading(false);
     }
