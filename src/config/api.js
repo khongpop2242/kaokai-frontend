@@ -16,10 +16,13 @@ export const getApiUrl = (endpoint) => {
     return endpoint;
   }
   
-  // ลบ leading slash ถ้ามี
-  const cleanEndpoint = endpoint.startsWith('/') ? endpoint.slice(1) : endpoint;
+  // ทำความสะอาด API_URL - ลบ trailing slash ถ้ามี
+  const cleanBaseUrl = API_URL.replace(/\/+$/, '');
+  
+  // ลบ leading slash จาก endpoint ถ้ามี
+  const cleanEndpoint = endpoint.replace(/^\/+/, '');
   
   // รวม API_URL กับ endpoint
-  return `${API_URL}/${cleanEndpoint}`;
+  return `${cleanBaseUrl}/${cleanEndpoint}`;
 };
 
