@@ -56,11 +56,11 @@ Create a `.env` file in the root directory for local development:
 REACT_APP_API_URL=http://localhost:5050
 ```
 
-For production on Vercel, the backend URL is automatically configured.
+For production, the backend URL is automatically configured to `https://kaokai-backend.onrender.com`.
 
 ## Deployment
 
-This project is configured for deployment on Vercel. 
+This project can be deployed on both **Vercel** and **Render**. 
 
 ### Vercel Setup Steps:
 
@@ -92,6 +92,35 @@ This project is configured for deployment on Vercel.
 - SPA routing (rewrite all routes to index.html)
 - Cache headers สำหรับ static assets
 - Build configuration
+
+---
+
+### Render Deployment Guide
+
+สำหรับ deploy บน Render (Static Site):
+
+1. **Connect GitHub Repository**
+   - ไปที่ [Render Dashboard](https://dashboard.render.com)
+   - คลิก "New Static Site"
+   - เลือก repository `kaokai-frontend` จาก GitHub
+
+2. **Configure Settings**:
+   - **Name**: `kaokai-frontend` (หรือชื่อที่ต้องการ)
+   - **Branch**: `main`
+   - **Root Directory**: **เว้นว่างไว้** (เพราะ repo คือ frontend อยู่แล้ว)
+   - **Build Command**: `npm install && npm run build`
+   - **Publish Directory**: `build` ⚠️ **สำคัญมาก!**
+   - **Environment Variables** (Optional):
+     - `REACT_APP_API_URL` - ถ้าต้องการ override backend URL
+
+3. **Deploy**
+   - คลิก "Create Static Site"
+   - Render จะ build และ deploy อัตโนมัติ
+   - หลังจาก deploy สำเร็จ จะได้ URL สำหรับ production
+
+### Render Configuration File
+
+ไฟล์ `render.yaml` ได้ถูกตั้งค่าไว้แล้วสำหรับ reference (optional)
 
 ## Project Structure
 

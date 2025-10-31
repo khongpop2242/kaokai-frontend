@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: kaokai-frontend
+    env: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./build
+    envVars:
+      - key: REACT_APP_API_URL
+        sync: false
+        # Optional: ตั้งค่าใน Render dashboard ถ้าต้องการ override
+        # default value: https://kaokai-backend.onrender.com
+
