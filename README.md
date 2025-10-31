@@ -110,8 +110,22 @@ This project can be deployed on both **Vercel** and **Render**.
    - **Root Directory**: **เว้นว่างไว้** (เพราะ repo คือ frontend อยู่แล้ว)
    - **Build Command**: `npm install && npm run build`
    - **Publish Directory**: `build` ⚠️ **สำคัญมาก!**
-   - **Environment Variables** (Optional):
-     - `REACT_APP_API_URL` - ถ้าต้องการ override backend URL
+   
+3. **ตั้งค่า SPA Routing** (สำคัญมาก! ต้องทำ):
+   - หลังจากสร้าง Static Site แล้ว ไปที่ **Settings** → **Headers**
+   - คลิก **"Add Header"**
+   - ตั้งค่า:
+     - **Path**: `/*`
+     - **Name**: ไม่ต้องใส่
+     - **Redirect**: `/index.html`
+     - **Status**: `200` (ไม่ใช่ 301 หรือ 302)
+   - หรือใช้ไฟล์ `_redirects` ที่อยู่ใน `public/` folder (จะถูก copy ไปยัง `build/` folder อัตโนมัติ)
+   - **หมายเหตุ**: ต้องตั้งค่า redirect นี้เพื่อให้ SPA routing ทำงาน (แก้ปัญหา refresh หน้าเว็บหาย และ 404 เมื่อเข้าหน้า register/products โดยตรง)
+   
+4. **Environment Variables** (Optional):
+   - ไปที่ **Settings** → **Environment Variables**
+   - เพิ่ม `REACT_APP_API_URL` - ถ้าต้องการ override backend URL
+   - ถ้าไม่ตั้งค่า จะใช้ default: `https://kaokai-backend.onrender.com`
 
 3. **Deploy**
    - คลิก "Create Static Site"
